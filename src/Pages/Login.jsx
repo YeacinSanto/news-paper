@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import React, { use, useState } from "react";
+=======
+import React, { use, useContext, useState } from "react";
+>>>>>>> d723a37
 import { Link, useLocation, useNavigate } from "react-router";
 import { AuthContext } from "../Provider/AuthProvider";
 
@@ -6,7 +10,11 @@ const Login = () => {
 
   const [error,setError] = useState("")
 
+<<<<<<< HEAD
   const {signIn} = use(AuthContext)
+=======
+  const {signIn} = useContext(AuthContext)
+>>>>>>> d723a37
 
   const location = useLocation();
   const navigate = useNavigate();
