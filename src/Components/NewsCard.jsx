@@ -1,71 +1,86 @@
-import React from "react";
-import { FaEye, FaRegBookmark, FaShareAlt, FaStar } from "react-icons/fa";
+import { FaEye, FaStar, FaShareAlt, FaRegBookmark } from "react-icons/fa";
+import { Link } from "react-router";
 
-export default function NewsCard({ news }) {
-  const {
-    title,
-    rating,
-    total_view,
-    author,
-    thumbnail_url,
-    details,
-    tags,
-  } = news;
+const NewsCard = ({ news }) => {
+  const { id, title, author, thumbnail_url, details, rating, total_view } =
+    news;
+
+  const formattedDate = new Date(
+    news.author.published_date
+  ).toLocaleDateString();
 
   return (
-    <div className="w-full max-w-xl rounded-2xl shadow-md  p-4 bg-white">
-      <div className="flex items-center justify-between mb-4 bg-base-200 rounded-2xl p-3">
+    <div className="card bg-base-100 shadow-md mb-6">
+      {/* Author + Share */}
+      <div className="flex bg-base-200 justify-between items-center p-4">
         <div className="flex items-center gap-3">
-          <img
-            src={author.img}
-            alt={author.name}
-            className="w-10 h-10 rounded-full object-cover"
-          />
-          <div className="flex items-center gap-2">
-  <div>
-    <h3 className="font-semibold text-gray-800">{author.name}</h3>
-    <p className="text-sm text-gray-500">
-      {new Date(author.published_date).toLocaleDateString()}
-    </p>
-  </div>
-  
-</div>
-
+          <div className="avatar">
+            <div className="w-10 rounded-full">
+              <img src={author.img} alt={author.name} />
+            </div>
+          </div>
+          <div>
+            <h2 className="font-bold text-sm">{author.name}</h2>
+            <p className="text-xs text-gray-500">{formattedDate}</p>
+          </div>
         </div>
+        <button className="text-gray-500 hover:text-primary flex gap-1">
+          <FaRegBookmark></FaRegBookmark>
+          <FaShareAlt />
+        </button>
       </div>
 
-      <h2 className="text-xl font-semibold mb-3 text-gray-900">{title}</h2>
-
-      <img
-        src={thumbnail_url}
-        alt="thumbnail"
-        className="w-full rounded-xl mb-4 object-cover"
-      />
-
-      <p className="text-gray-700 mb-3">
-        {details.length > 200 ? details.slice(0, 200) + "   .....Read More": details}
-      </p>
-
-      <div className="flex flex-wrap gap-2 mb-4">
-        {tags.map((tag, idx) => (
-          <span
-            key={idx}
-            className="px-3 py-1 text-sm bg-gray-100 rounded-full text-gray-600"
-          >
-            #{tag}
-          </span>
-        ))}
+      {/* Title */}
+      <div className="px-4 py-4">
+        <h2 className="text-lg font-bold text-primary  cursor-pointer">
+          {title}
+        </h2>
       </div>
 
-      <div className="flex items-center justify-between pt-2 border-t">
-        <div className="flex items-center gap-2 text-yellow-500">
-          <FaStar></FaStar> <span>{rating.number}</span>
+      {/* Image */}
+      <div className="px-4 py-2">
+        <img
+          src={thumbnail_url}
+          alt={title}
+          className="w-full h-48 object-cover rounded-md"
+        />
+      </div>
+
+      {/* Details */}
+      <div className="px-4  text-accent">
+        {details.length > 200 ? (
+          <>
+            {details.slice(0, 200)}...
+            <Link
+              to={`/news-details/${id}`}
+              className="text-primary font-semibold cursor-pointer hover:underline"
+            >
+              Read More
+            </Link>
+          </>
+        ) : (
+          details
+        )}
+      </div>
+
+      {/* Footer */}
+      <div className="flex justify-between items-center px-4 py-3 border-t border-base-200 mt-3">
+        {/* Rating */}
+        <div className="flex items-center gap-1 text-orange-400">
+          {Array.from({ length: rating.number }).map((_, i) => (
+            <FaStar key={i} />
+          ))}
+          <span className="ml-2 text-gray-600">{rating.number}</span>
         </div>
 
-        <div className="flex items-center gap-2 text-gray-600">
-          <FaEye></FaEye> <span>{total_view}</span>
+        {/* Views */}
+        <div className="flex items-center gap-2 text-gray-500">
+          <FaEye />
+          <span>{total_view}</span>
         </div>
       </div>
     </div>
   );
-}
+};
+
+export default NewsCard;
